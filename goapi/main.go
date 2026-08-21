@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goapi/api"
 	"goapi/db"
 	"log"
 	"net/http"
@@ -13,8 +14,11 @@ func main() {
 	}
 	defer db.CloseDB()
 
+	router := api.SetupRoutes()
+	// api.SetupRoutes()
+
 	// Configure les routes de l'APImon
 	// Démarre le serveur
-	log.Println("Serveur démarré sur :3000")
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Println("Serveur démarré sur :3001")
+	log.Fatal(http.ListenAndServe(":3001", router))
 }

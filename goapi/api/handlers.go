@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"goapi/db" // Import du package db local
+	"goapi/db"
 	"net/http"
 )
 
@@ -24,6 +24,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 		}
 		users = append(users, u)
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
 }
