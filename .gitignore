@@ -32,28 +32,28 @@
 # .vscode/
 
 # SVELTE ignore
-/svwebsite/node_modules
+/website/node_modules
 
 # Output
-/svwebsite/.output
-/svwebsite/.vercel
-/svwebsite/.netlify
-/svwebsite/.wrangler
-/svwebsite/.svelte-kit
-/svwebsite/build
+/website/.output
+/website/.vercel
+/website/.netlify
+/website/.wrangler
+/website/.svelte-kit
+/website/build
 
 
 # OS
-/svwebsite/.DS_Store
-/svwebsite/Thumbs.db
+/website/.DS_Store
+/website/Thumbs.db
 
 # Env
-/svwebsite/.env
-/svwebsite/.env.*
-!/svwebsite/.env.example
-!/svwebsite/.env.test
+/website/.env
+/website/.env.*
+!/website/.env.example
+!/website/.env.test
 
 # Vite
-/svwebsite/vite.config.js.timestamp-*
-/svwebsite/vite.config.ts.timestamp-*
+/website/vite.config.js.timestamp-*
+/website/vite.config.ts.timestamp-*
 
