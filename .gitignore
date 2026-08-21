@@ -2,30 +2,30 @@
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
 # Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+/goapi/*.exe
+/goapi/*.exe~
+/goapi/*.dll
+/goapi/*.so
+/goapi/*.dylib
 
 # Test binary, built with `go test -c`
-*.test
+/goapi/*.test
 
 # Code coverage profiles and other test artifacts
-*.out
-coverage.*
-*.coverprofile
-profile.cov
+/goapi/*.out
+/goapi/coverage.*
+/goapi/*.coverprofile
+/goapi/profile.cov
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+# /goapi/vendor/
 
 # Go workspace file
-go.work
-go.work.sum
+/goapi/go.work
+/goapi/go.work.sum
 
 # env file
-.env
+/goapi/.env
 
 # Editor/IDE
 # .idea/
