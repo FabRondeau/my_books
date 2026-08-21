@@ -1,0 +1,1 @@
+import{_ as e,h as t}from"../chunks/CigMJvDI.js";import"../chunks/xihTtKlq.js";var n=e(`<h1>About</h1>`);function r(e){var r=n();t(e,r)}export{r as component};

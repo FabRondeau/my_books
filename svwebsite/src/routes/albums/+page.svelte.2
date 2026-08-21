@@ -1,0 +1,38 @@
+<script>
+	import { onMount } from 'svelte';
+
+	let url = 'http://localhost:3000/albums';
+	let albums = $state([]);
+	let isLoading = $state(true);// Pour afficher un état de chargement
+
+	onMount(async () => {
+		try {
+			albums = await getAlbums();
+		} catch (err) {
+			console.error("Erreur :", err);
+		} finally {
+			isLoading = false; // Va instantanément rafraîchir l'écran
+		}
+	});
+
+	const getAlbums = async () => {
+		const res = await fetch(url);
+		if (!res.ok) throw new Error("Erreur API");
+		const data = await res.json();
+		return data.slice(0, 3);
+	};
+</script>
+
+<h1>Nos albums</h1>
+
+{#if isLoading}
+	<p>Chargement...</p>
+{:else}
+	<ul>
+		{#each albums as album}
+			<li>{album.title}</li>
+		{:else}
+			<li>Aucun album disponible</li>
+		{/each}
+	</ul>
+{/if}
