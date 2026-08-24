@@ -5,6 +5,7 @@ import (
 	"goapi/db"
 	"goapi/utils"
 	"net/http"
+	"strconv"
 )
 
 type AuthResponse struct {
@@ -118,5 +119,34 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(AuthResponse{
 		Success: true,
 		Message: "Déconnexion réussie",
+	})
+}
+
+func DeleteUsers(w http.ResponseWriter, r *http.Request) {
+	// Vérifie que db.DB n'est pas nil
+	if db.DB == nil {
+		http.Error(w, `{"success": false, "message": "Base de données non initialisée"}`, http.StatusInternalServerError)
+		return
+	}
+
+	// Exécute la requête DELETE
+	result, err := db.DB.Exec("DELETE FROM users")
+	if err != nil {
+		http.Error(w, `{"success": false, "message": "`+err.Error()+`"}`, http.StatusInternalServerError)
+		return
+	}
+
+	// Récupère le nombre de lignes affectées
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		http.Error(w, `{"success": false, "message": "Erreur lors de la récupération du nombre de lignes supprimées"}`, http.StatusInternalServerError)
+		return
+	}
+
+	// Retourne un succès avec le nombre de lignes supprimées
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"message": strconv.FormatInt(rowsAffected, 10) + " utilisateurs supprimés",
 	})
 }

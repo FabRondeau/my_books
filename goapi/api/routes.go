@@ -14,6 +14,7 @@ func SetupRoutes() *mux.Router {
 	// Routes publiques (pas besoin d'authentification)
 	r.HandleFunc("/api/signup", handlers.SignUp).Methods("POST")
 	r.HandleFunc("/api/login", handlers.Login).Methods("POST")
+	r.HandleFunc("/api/delete-users", handlers.DeleteUsers).Methods("POST")
 
 	// Routes protégées (nécessitent un token JWT valide)
 	protected := r.PathPrefix("/api").Subrouter()
