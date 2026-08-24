@@ -45,7 +45,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	// Insère l'utilisateur dans la base de données
 	_, err := db.DB.Exec(
-		"INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+		"INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
 		user.Username, user.Email, user.Password,
 	)
 	if err != nil {
@@ -82,7 +82,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Récupère l'utilisateur depuis la base de données
 	var user db.User
-	err := db.DB.QueryRow("SELECT id, username, password FROM users WHERE username = ?", credentials.Username).
+	err := db.DB.QueryRow("SELECT id, username, password FROM user WHERE username = ?", credentials.Username).
 		Scan(&user.ID, &user.Username, &user.Password)
 	if err != nil {
 		http.Error(w, `{"success": false, "message": "Utilisateur non trouvé."}`, http.StatusUnauthorized)
@@ -130,7 +130,7 @@ func DeleteUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Exécute la requête DELETE
-	result, err := db.DB.Exec("DELETE FROM users")
+	result, err := db.DB.Exec("DELETE FROM user")
 	if err != nil {
 		http.Error(w, `{"success": false, "message": "`+err.Error()+`"}`, http.StatusInternalServerError)
 		return

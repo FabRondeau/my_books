@@ -8,7 +8,7 @@ import (
 
 // GetUsers retourne la liste des utilisateurs
 func GetUsers(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, username, email FROM users")
+	rows, err := db.DB.Query("SELECT id, username, email FROM user")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

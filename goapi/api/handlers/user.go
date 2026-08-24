@@ -7,13 +7,13 @@ import (
 	"net/http"
 )
 
-func GetProfile(w http.ResponseWriter, r *http.Request) {
+func GetUser(w http.ResponseWriter, r *http.Request) {
 	// Récupère l'ID utilisateur depuis le contexte avec UserIDKey
 	userID := r.Context().Value(middleware.UserIDKey).(int)
 
 	var user db.User
 	err := db.DB.QueryRow(
-		"SELECT id, username, email FROM users WHERE id = ?",
+		"SELECT id, username, email FROM user WHERE id = ?",
 		userID,
 	).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {

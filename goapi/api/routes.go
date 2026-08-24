@@ -10,7 +10,7 @@ import (
 // SetupRoutes configure les routes de l'API
 func SetupRoutes() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/users", GetUsers).Methods("GET")
+	r.HandleFunc("/api/users", GetUsers).Methods("GET")
 	// Routes publiques (pas besoin d'authentification)
 	r.HandleFunc("/api/signup", handlers.SignUp).Methods("POST")
 	r.HandleFunc("/api/login", handlers.Login).Methods("POST")
@@ -20,7 +20,7 @@ func SetupRoutes() *mux.Router {
 	protected := r.PathPrefix("/api").Subrouter()
 	protected.Use(middleware.AuthMiddleware)
 	protected.HandleFunc("/api/logout", handlers.Logout).Methods("POST")
-	protected.HandleFunc("/api/profile", handlers.GetProfile).Methods("GET")
+	protected.HandleFunc("/api/profile", handlers.GetUser).Methods("GET")
 
 	return r
 }

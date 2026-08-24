@@ -28,11 +28,11 @@ func TestGetUsersWithMock(t *testing.T) {
 		AddRow(1, "testuser", "test@example.com").
 		AddRow(2, "anotheruser", "another@example.com")
 
-	mock.ExpectQuery("SELECT id, username, email FROM users").
+	mock.ExpectQuery("SELECT id, username, email FROM user").
 		WillReturnRows(rows)
 
 	// Crée une requête HTTP
-	req, err := http.NewRequest("GET", "/users", nil)
+	req, err := http.NewRequest("GET", "/api/users", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
