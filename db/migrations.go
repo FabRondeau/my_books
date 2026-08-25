@@ -21,31 +21,43 @@ func RunMigrations(db *sql.DB) error {
 					totalitems INT NOT NULL,
 					title VARCHAR(255) NOT NULL,
 					subtitle VARCHAR(255) NOT NULL,
-					publishedDate VARCHAR(15) NOT NULL,
+					publisheddate VARCHAR(15) NOT NULL,
 					publisherid INTEGER NOT NULL,
 					FOREIGN KEY (publisherid) REFERENCES publisher(id)
         );
 				CREATE TABLE IF NOT EXISTS author (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					firstname VARCHAR(150) NOT NULL,
-					lastname VARCHAR(150) NOT NULL
+					fullname VARCHAR(150) NOT NULL
         );
 				CREATE TABLE IF NOT EXISTS publisher (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					name VARCHAR(150) NOT NULL
         );
-				CREATE TABLE IF NOT EXISTS book_authors(
+				CREATE TABLE IF NOT EXISTS book_author(
 					bookid INTEGER NOT NULL,
 					authorid INTEGER NOT NULL,
 					FOREIGN KEY (bookid) REFERENCES book(id),
 					FOREIGN KEY (authorid) REFERENCES author(id)
 				);
-				CREATE TABLE IF NOT EXISTS user_book (
+				CREATE TABLE IF NOT EXISTS user_location (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					userid INTEGER NOT NULL,
+					location VARCHAR NOT NULL,
+					FOREIGN KEY (userid) REFERENCES user(id)
+				);
+				CREATE TABLE IF NOT EXISTS book_user_location (
+					userlocationid INTEGER NOT NULL,
 					bookid INTEGER NOT NULL,
-					FOREIGN KEY (userid) REFERENCES user(id),
+					FOREIGN KEY (userlocationid) REFERENCES user_location(id),
 					FOREIGN KEY (bookid) REFERENCES book(id)
 				);
+
+
+				-- INSERT INTO author (fullname) values ('Jérôme Loubry');
+				-- INSERT INTO publisher (name) values ('Le livre de poche');
+				-- INSERT INTO book (isbn13,kind,totalitems,title,subtitle,publisheddate,publisherid) values ('9782253181590','Roman',1,'Les Refuges','','2019',1);
+				-- INSERT INTO book_author (bookid,authorid) values (1,1);
+
 
     `)
 	if err != nil {

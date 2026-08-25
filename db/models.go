@@ -12,6 +12,21 @@ type User struct {
 	Password string `json:"-"` // Désérialise mais n'inclut pas dans les réponses si vide
 }
 
+type Book struct {
+	ID            int    `json:"id"`
+	ISBN13        string `json:"isbn13"`
+	Title         string `json:"title"`
+	Subtitle      string `json:"subtitle"`
+	Kind          string `json:"kind"`
+	Publisher     string `json:"publisher"`
+	PublishedDate string `json:"publisheddate"`
+}
+
+type Publisher struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
 // HashPassword hache le mot de passe avec bcrypt
 func (u *User) HashPassword() error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)

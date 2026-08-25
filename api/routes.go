@@ -22,5 +22,8 @@ func SetupRoutes() *mux.Router {
 	protected.HandleFunc("/api/logout", handlers.Logout).Methods("POST")
 	protected.HandleFunc("/api/profile", handlers.GetUser).Methods("GET")
 
+	// Books
+	r.HandleFunc("/api/books", GetBooks).Methods("GET")
+	r.HandleFunc("/api/book/add", handlers.AddBook).Methods("POST")
 	return r
 }
