@@ -1,24 +1,42 @@
 package main
 
 import (
-	"goapi/api"
+	"goapi/config"
+	"goapi/controller"
 	"goapi/db"
-	"log"
+	"goapi/router"
 	"net/http"
+	"os"
+	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
-	// Initialise la base de données
-	if err := db.InitDB(); err != nil {
-		log.Fatal("Erreur lors de l'initialisation de la DB :", err)
+	// Database
+	db.InitDB()
+	db.CloseDB()
+	db := config.DatabaseConnection()
+
+	validate := validator.New()
+
+	// Controller
+	authController := controller.NewAuthControllerImpl(db, validate)
+
+	// Router
+	routes := router.AuthRouter(authController)
+
+	server := &http.Server{
+		Addr:           ":" + os.Getenv("API_PORT"),
+		Handler:        routes,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
-	defer db.CloseDB()
 
-	router := api.SetupRoutes()
-	// api.SetupRoutes()
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 
-	// Configure les routes de l'APImon
-	// Démarre le serveur
-	log.Println("Serveur démarré sur :3001")
-	log.Fatal(http.ListenAndServe(":3001", router))
 }

@@ -1,7 +1,8 @@
 package db
 
 import (
-	"database/sql"
+	"goapi/config"
+	"goapi/model"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -11,23 +12,12 @@ var DB DBInterface
 
 // InitDB initialise la connexion à la base de données
 func InitDB() error {
-	var dbname = "library"
-	conn, err := sql.Open("sqlite3", "./"+dbname+".sqlite")
-	if err != nil {
-		return err
-	}
+	conn := config.DatabaseConnection()
+	conn.AutoMigrate(model.User{})
+	conn.AutoMigrate(model.Publisher{})
+	conn.AutoMigrate(model.Author{})
+	conn.AutoMigrate(model.Book{})
 
-	// Vérifie la connexion
-	if err = conn.Ping(); err != nil {
-		return err
-	}
-
-	// Exécute les migrations
-	if err = RunMigrations(conn); err != nil {
-		return err
-	}
-	// Assigne l'interface
-	DB = conn
 	return nil
 }
 
