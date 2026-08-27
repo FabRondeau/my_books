@@ -25,6 +25,7 @@ func main() {
 	authController := controller.NewAuthControllerImpl(dbs, validate)
 	publicController := controller.NewPublicControllerImpl(dbs, validate)
 	publisherController := controller.NewPublisherControllerImpl(dbs, validate)
+	authorController := controller.NewAuthorControllerImpl(dbs, validate)
 
 	// Création d'une instance unique de gin.Engine
 	engine := gin.Default()
@@ -33,6 +34,7 @@ func main() {
 	router.AuthRouter(engine, authController)
 	router.PublicRouter(engine, publicController)
 	router.PublisherRouter(engine, publisherController)
+	router.AuthorRouter(engine, authorController)
 
 	// Configuration du serveur HTTP
 	server := &http.Server{
