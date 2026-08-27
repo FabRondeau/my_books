@@ -9,34 +9,43 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
 func main() {
-	// Database
+	// Initialisation de la base de données
 	db.InitDB()
-	db.CloseDB()
-	db := config.DatabaseConnection()
+	defer db.CloseDB()
+	dbs := config.DatabaseConnection()
 
 	validate := validator.New()
 
-	// Controller
-	authController := controller.NewAuthControllerImpl(db, validate)
+	// Initialisation des contrôleurs
+	authController := controller.NewAuthControllerImpl(dbs, validate)
+	publicController := controller.NewPublicControllerImpl(dbs, validate)
+	publisherController := controller.NewPublisherControllerImpl(dbs, validate)
 
-	// Router
-	routes := router.AuthRouter(authController)
+	// Création d'une instance unique de gin.Engine
+	engine := gin.Default()
 
+	// Ajout des routes à l'instance principale
+	router.AuthRouter(engine, authController)
+	router.PublicRouter(engine, publicController)
+	router.PublisherRouter(engine, publisherController)
+
+	// Configuration du serveur HTTP
 	server := &http.Server{
 		Addr:           ":" + os.Getenv("API_PORT"),
-		Handler:        routes,
+		Handler:        engine,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	// Démarrage du serveur
 	err := server.ListenAndServe()
 	if err != nil {
 		panic(err)
 	}
-
 }

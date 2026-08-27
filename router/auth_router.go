@@ -6,13 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthRouter(authController *controller.AuthController) *gin.Engine {
-	service := gin.Default()
-
-	router := service.Group("/auth")
-
-	router.POST("/register", authController.Register)
-	router.POST("/login", authController.Login)
-
-	return service
+// AuthRouter ajoute les routes d'authentification à l'instance existante de gin.Engine
+func AuthRouter(engine *gin.Engine, authController *controller.AuthController) {
+	authGroup := engine.Group("/auth")
+	authGroup.POST("/register", authController.Register)
+	authGroup.POST("/login", authController.Login)
 }
