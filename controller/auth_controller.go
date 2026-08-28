@@ -3,8 +3,8 @@ package controller
 import (
 	"fmt"
 	"goapi/data/request"
-	"goapi/helper"
 	"goapi/model"
+	"goapi/security"
 	"net/http"
 
 	"gorm.io/gorm"
@@ -42,7 +42,7 @@ func (c AuthController) Register(ctx *gin.Context) {
 		return
 	}
 
-	password, err := helper.EncryptPassword(reqBody.Password)
+	password, err := security.EncryptPassword(reqBody.Password)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to encrypt password"})
@@ -84,14 +84,14 @@ func (c AuthController) Login(ctx *gin.Context) {
 		return
 	}
 
-	valid := helper.ComparePassword(reqBody.Password, existingUser.Password)
+	valid := security.ComparePassword(reqBody.Password, existingUser.Password)
 
 	if valid != true {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Password invalid"})
 		return
 	}
 
-	token, err := helper.CreateToken(existingUser.Email)
+	token, err := security.CreateToken(existingUser.Email)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "JWT Error"})
