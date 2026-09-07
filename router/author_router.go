@@ -16,7 +16,7 @@ func PublicAuthorRouter(engine *gin.Engine, authorController *controller.AuthorC
 func PrivateAuthorRouter(engine *gin.Engine, authorController *controller.AuthorController) {
 	// authorized := security.Auth(engine.Handler())
 
-	protected := PrivateRouter(engine, authorController)
+	protected := PrivateRouter(engine)
 	// protected := engine.Group("/private")
 	// protected.Use(security.AuthMiddleware())
 	privateAuthorsGroup := protected.Group("/author")

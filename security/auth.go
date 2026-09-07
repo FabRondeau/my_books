@@ -16,7 +16,7 @@ var jwtKey = []byte(os.Getenv("JWT_SECRET")) // In production, use a secure envi
 
 // Claims represents the JWT claims
 type Claims struct {
-	UserID   uint   `json:"user_id"`
+	UserId   uint   `json:"user_id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
@@ -105,7 +105,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// Store user information in the context
-		c.Set("user_id", claims.UserID)
+		c.Set("user_id", claims.UserId)
 		c.Set("username", claims.Username)
 		// Check claims User informations.
 		// println(claims.UserID, claims.Username)

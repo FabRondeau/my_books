@@ -35,6 +35,7 @@ func main() {
 	router.PublicRouter(engine, publicController)
 	router.PublisherRouter(engine, publisherController)
 	router.PrivateAuthorRouter(engine, authorController)
+	router.PrivatePublisherRouter(engine, publisherController)
 
 	// Configuration du serveur HTTP
 	server := &http.Server{

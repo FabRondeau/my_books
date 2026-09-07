@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"goapi/data/request"
+	"goapi/functions"
 	"goapi/model"
 	"net/http"
 
@@ -23,9 +24,8 @@ func NewAuthorControllerImpl(Db *gorm.DB, validate *validator.Validate) *AuthorC
 
 func (c AuthorController) DisplayAll(ctx *gin.Context) {
 
-	var existingAuthors model.Author
+	var existingAuthors []model.Author
 	c.Db.Find(&existingAuthors)
-	// fmt.Println(existingAuthors)
 	ctx.JSON(http.StatusOK, existingAuthors)
 }
 
@@ -46,7 +46,6 @@ func (c AuthorController) Add(ctx *gin.Context) {
 
 	// var existingAuthor model.Author
 	existingAuthor := c.FindByFullName(reqBody.FullName)
-	// fmt.Println(existingAuthor)
 	if existingAuthor.Id > 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Author " + existingAuthor.FullName + " already exists"})
 		return
@@ -68,9 +67,9 @@ func (c AuthorController) Add(ctx *gin.Context) {
 func (c AuthorController) FindByFullName(full_name string) model.Author {
 
 	var existingAuthor model.Author
-	result := c.Db.Where("full_name = ?", full_name).First(&existingAuthor)
+	searchedFullName := functions.FrenchLowerCase(full_name)
+	result := c.Db.Where("replace(replace(replace(lower(full_name),'é','e'),'è','e'),'ê','e') = ?", searchedFullName).First(&existingAuthor)
 
-	fmt.Println(result.RowsAffected)
 	if result.RowsAffected > 0 {
 		// ctx.JSON(http.StatusBadRequest, gin.H{"error": "Author already exists"})
 

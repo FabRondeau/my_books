@@ -1,13 +1,15 @@
 package security
 
 import (
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var secretKey = []byte("secret-key")
+// var secretKey = []byte("secret-key")
+var SecretKey = []byte(os.Getenv("JWT_SECRET"))
 
 func EncryptPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -19,14 +21,14 @@ func ComparePassword(password, hash string) bool {
 	return err == nil
 }
 
-func CreateToken(email string) (string, error) {
+func CreateToken(user_id uint, user_name string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"email": email,
-			"exp":   time.Now().Add(time.Hour * 24).Unix(),
+			"UserId":   user_id,
+			"Username": user_name,
+			"exp":      time.Now().Add(time.Hour * 24).Unix(),
 		})
-
-	tokenString, err := token.SignedString(secretKey)
+	tokenString, err := token.SignedString(SecretKey)
 	if err != nil {
 		return "", err
 	}

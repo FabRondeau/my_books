@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"goapi/data/request"
+	"goapi/functions"
 	"goapi/model"
 	"net/http"
 
@@ -23,9 +24,8 @@ func NewPublisherControllerImpl(Db *gorm.DB, validate *validator.Validate) *Publ
 
 func (c PublisherController) DisplayAll(ctx *gin.Context) {
 
-	var existingPublishers model.Publisher
+	var existingPublishers []model.Publisher
 	c.Db.Find(&existingPublishers)
-	// fmt.Println(existingPublishers)
 	ctx.JSON(http.StatusOK, existingPublishers)
 }
 
@@ -46,7 +46,6 @@ func (c PublisherController) Add(ctx *gin.Context) {
 
 	// var existingPublisher model.Publisher
 	existingPublisher := c.FindByName(reqBody.Name)
-	// fmt.Println(existingPublisher)
 	if existingPublisher.Id > 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Publisher " + existingPublisher.Name + " already exists"})
 		return
@@ -67,10 +66,10 @@ func (c PublisherController) Add(ctx *gin.Context) {
 
 func (c PublisherController) FindByName(name string) model.Publisher {
 
+	searchedName := functions.FrenchLowerCase(name)
 	var existingPublisher model.Publisher
-	result := c.Db.Where("name = ?", name).First(&existingPublisher)
+	result := c.Db.Where("replace(replace(replace(lower(name),'é','e'),'è','e'),'ê','e') = ?", searchedName).First(&existingPublisher)
 
-	fmt.Println(result.RowsAffected)
 	if result.RowsAffected > 0 {
 		// ctx.JSON(http.StatusBadRequest, gin.H{"error": "Publisher already exists"})
 

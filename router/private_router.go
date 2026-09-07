@@ -1,13 +1,12 @@
 package router
 
 import (
-	"goapi/controller"
 	"goapi/security"
 
 	"github.com/gin-gonic/gin"
 )
 
-func PrivateRouter(engine *gin.Engine, authorController *controller.AuthorController) *gin.RouterGroup {
+func PrivateRouter(engine *gin.Engine) *gin.RouterGroup {
 	// authorized := security.Auth(engine.Handler())
 
 	protected := engine.Group("/private")
