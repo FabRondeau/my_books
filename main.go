@@ -26,6 +26,7 @@ func main() {
 	publicController := controller.NewPublicControllerImpl(dbs, validate)
 	publisherController := controller.NewPublisherControllerImpl(dbs, validate)
 	authorController := controller.NewAuthorControllerImpl(dbs, validate)
+	bookController := controller.NewBookControllerImpl(dbs, validate)
 
 	// Création d'une instance unique de gin.Engine
 	engine := gin.Default()
@@ -35,6 +36,7 @@ func main() {
 	router.PublicRouter(engine, publicController)
 	router.PublisherRouter(engine, publisherController)
 	router.PrivateAuthorRouter(engine, authorController)
+	router.PrivateBookRouter(engine, bookController)
 	router.PrivatePublisherRouter(engine, publisherController)
 
 	// Configuration du serveur HTTP

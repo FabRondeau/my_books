@@ -63,7 +63,7 @@ func ValidateToken(tokenString string) (*Claims, error) {
 		}
 		return jwtKey, nil
 	})
-
+	fmt.Println(token.Claims.(*Claims).UserId)
 	if err != nil {
 		return nil, err
 	}

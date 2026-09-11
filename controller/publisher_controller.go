@@ -5,6 +5,7 @@ import (
 	"goapi/data/request"
 	"goapi/functions"
 	"goapi/model"
+	"log"
 	"net/http"
 
 	"gorm.io/gorm"
@@ -62,6 +63,25 @@ func (c PublisherController) Add(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "The publisher " + reqBody.Name + " registered successfully"})
+}
+
+func (c PublisherController) CreateIfNotExists(name string) int, err { // var existingPublisher model.Publisher
+	existingPublisher := c.FindByName(name)
+	if existingPublisher.Id > 0 {
+		return existingPublisher.Id
+	}
+
+	// We can create the new publisher
+	newPublisher := model.Publisher{
+		Name: name,
+	}
+
+	if err := c.Db.Create(&newPublisher).Error; err != nil {
+		return err
+	}
+	createdPublisher := c.FindByName(name)
+	return createdPublisher.Id
+
 }
 
 func (c PublisherController) FindByName(name string) model.Publisher {
